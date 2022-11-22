@@ -1,5 +1,6 @@
 ﻿
 
+
 using WindowsLocalNetwork.Services;
 using WindowsLocalNetwork.Helpers;
 
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Windows.Forms;
 using System.Threading.Tasks;
+using System.Media;
 
 
 namespace WindowsLocalNetwork
@@ -18,6 +20,8 @@ namespace WindowsLocalNetwork
     public delegate void ListDevice_CallBack(string deviceList);
     public delegate void ProgressBardelegate(bool isSending);
     public delegate void ProgressChangeDelegate(double percentage, bool isComplete);
+    delegate void Delegate_ProgressCloudBytes(long bytes, long size);
+
 
     public partial class Form1 : Form
     {
@@ -26,6 +30,10 @@ namespace WindowsLocalNetwork
         private Thread _threadClient;
         private Server _server;
         private Client _client;
+        private Split_Merge_File _split_Merge;
+        private CloudSend _cloudSend;
+        private CloudReceive _cloudReceive;
+
 
         public Form1()
         {
@@ -37,7 +45,7 @@ namespace WindowsLocalNetwork
 
             progressBar1.Hide();
             label2.Hide();
-            
+
             CheckingEthernet.TextErrorEvent += ErrorText_Callback;
         }
 
@@ -47,6 +55,9 @@ namespace WindowsLocalNetwork
             Task task = Task.Factory.StartNew(() =>
             {
                 Start();
+                //await Task.Delay(5000);
+                //AuthGoogle authGoogle = new AuthGoogle();
+                //authGoogle.StartAuth_Async();
             });
         }
 
@@ -54,6 +65,9 @@ namespace WindowsLocalNetwork
         {
             _server = new Server();
             _client = new Client();
+            _split_Merge = new Split_Merge_File();
+            _cloudSend = new CloudSend();
+            _cloudReceive = new CloudReceive();
 
             _server.server_Text_Event += ServerText_Callback;
             _server.listDevice_Event += ClientText_Callback;
@@ -64,6 +78,18 @@ namespace WindowsLocalNetwork
             _client.progressBarEvent += ProgressBarVisible;
             _client.progressChangeEvent += ProgressBarChange;
             _client.event_EndCheckDevice += EndCheckDevice;
+
+            _split_Merge.textErrorEvent += ErrorText_Callback;
+            _split_Merge.progressBarEvent += ProgressBarVisible;
+            _split_Merge.progressChangeEvent += ProgressBarChange;
+
+            _cloudSend.textErrorEvent += ErrorText_Callback;
+            _cloudSend.progressBarEvent += ProgressBarVisible;
+            _cloudSend.progressChangeEvent += ProgressBarChange;
+
+            _cloudReceive.textErrorEvent += ErrorText_Callback;
+            _cloudReceive.progressBarEvent += ProgressBarVisible;
+            _cloudReceive.progressChangeEvent += ProgressBarChange;
 
             // is disable Wi-Fi connection.
             await CheckingEthernet.IsConnections();
@@ -124,6 +150,7 @@ namespace WindowsLocalNetwork
                 this.Invoke((MethodInvoker)(() =>
                 {
                     this.label3.Text = str;
+                    OnePing();
                 }));
             }
         }
@@ -174,11 +201,12 @@ namespace WindowsLocalNetwork
                 {
                     progressBar1.Value = (int)percentage;
 
-                    if(isComplete)
+                    if (isComplete)
                     {
                         progressBar1.Hide();
                         label2.ForeColor = System.Drawing.Color.Green;
-                        label2.Text = "File downloaded to desktop";
+                        label2.Text = "Downloading End";
+                        OnePing();
                     }
                 }));
             }
@@ -206,6 +234,54 @@ namespace WindowsLocalNetwork
         {
             System.Windows.Forms.Application.ExitThread();
             System.Environment.Exit(0);
+        }
+
+        private void SplitFiles_Click(object sender, EventArgs e)
+        {
+            string[] inputFilePath = OpenFileDialog();
+
+            if (inputFilePath != null && inputFilePath.Length > 0)
+            {
+                Task.Run(() =>
+                {
+                    _split_Merge.BigFileSplit(inputFilePath[0]);
+                });
+            }
+        }
+
+        private void MergeFiles_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                _split_Merge.MergeFiles();
+            });
+        }
+
+        private void SendFiles_Click(object sender, EventArgs e)
+        {
+
+            string[] inputFilePath = OpenFileDialog();
+
+            if (inputFilePath != null && inputFilePath.Length > 0)
+            {
+                Task.Run(() =>
+                {
+                    _cloudSend.StartSending_Async(inputFilePath, _split_Merge);
+                });
+            }
+        }
+
+        private void ReceiveFiles_Click(object sender, EventArgs e)
+        {
+            Task.Run(() =>
+            {
+                _cloudReceive.StartReceive(_split_Merge);
+            });
+        }
+
+        private void OnePing()
+        {
+            SystemSounds.Beep.Play();
         }
 
     }

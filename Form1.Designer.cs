@@ -35,12 +35,16 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.SplitFiles = new System.Windows.Forms.Button();
+            this.MergeFiles = new System.Windows.Forms.Button();
+            this.SendFiles = new System.Windows.Forms.Button();
+            this.ReceiveFiles = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button1.Location = new System.Drawing.Point(36, 67);
+            this.button1.Location = new System.Drawing.Point(24, 67);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(122, 23);
             this.button1.TabIndex = 0;
@@ -53,7 +57,7 @@
             this.listBox1.FormattingEnabled = true;
             this.listBox1.Location = new System.Drawing.Point(24, 112);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(229, 225);
+            this.listBox1.Size = new System.Drawing.Size(229, 134);
             this.listBox1.TabIndex = 1;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -93,11 +97,55 @@
             this.label3.Size = new System.Drawing.Size(0, 13);
             this.label3.TabIndex = 5;
             // 
+            // SplitFiles
+            // 
+            this.SplitFiles.Location = new System.Drawing.Point(24, 280);
+            this.SplitFiles.Name = "SplitFiles";
+            this.SplitFiles.Size = new System.Drawing.Size(229, 23);
+            this.SplitFiles.TabIndex = 6;
+            this.SplitFiles.Text = "Split file";
+            this.SplitFiles.UseVisualStyleBackColor = true;
+            this.SplitFiles.Click += new System.EventHandler(this.SplitFiles_Click);
+            // 
+            // MergeFiles
+            // 
+            this.MergeFiles.Location = new System.Drawing.Point(24, 320);
+            this.MergeFiles.Name = "MergeFiles";
+            this.MergeFiles.Size = new System.Drawing.Size(229, 23);
+            this.MergeFiles.TabIndex = 7;
+            this.MergeFiles.Text = "Merge files";
+            this.MergeFiles.UseVisualStyleBackColor = true;
+            this.MergeFiles.Click += new System.EventHandler(this.MergeFiles_Click);
+            // 
+            // SendFiles
+            // 
+            this.SendFiles.Location = new System.Drawing.Point(24, 361);
+            this.SendFiles.Name = "SendFiles";
+            this.SendFiles.Size = new System.Drawing.Size(229, 23);
+            this.SendFiles.TabIndex = 8;
+            this.SendFiles.Text = "Send files";
+            this.SendFiles.UseVisualStyleBackColor = true;
+            this.SendFiles.Click += new System.EventHandler(this.SendFiles_Click);
+            // 
+            // ReceiveFiles
+            // 
+            this.ReceiveFiles.Location = new System.Drawing.Point(24, 402);
+            this.ReceiveFiles.Name = "ReceiveFiles";
+            this.ReceiveFiles.Size = new System.Drawing.Size(229, 23);
+            this.ReceiveFiles.TabIndex = 9;
+            this.ReceiveFiles.Text = "Receive files";
+            this.ReceiveFiles.UseVisualStyleBackColor = true;
+            this.ReceiveFiles.Click += new System.EventHandler(this.ReceiveFiles_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(494, 450);
+            this.Controls.Add(this.ReceiveFiles);
+            this.Controls.Add(this.SendFiles);
+            this.Controls.Add(this.MergeFiles);
+            this.Controls.Add(this.SplitFiles);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.progressBar1);
@@ -121,6 +169,10 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button SplitFiles;
+        private System.Windows.Forms.Button MergeFiles;
+        private System.Windows.Forms.Button SendFiles;
+        private System.Windows.Forms.Button ReceiveFiles;
     }
 }
 
